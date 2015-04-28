@@ -13,7 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@color/background"
-        android:src="@drawable/toggle_off"
         android:onClick="toggleFlashlight"
         android:contentDescription="@string/flashlight_toggle"
          />
