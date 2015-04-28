@@ -25,6 +25,7 @@ public class ToggleActivity extends FragmentActivity {
 		// TODO method to update the icon and place mark
 		if(camera == null){
 			camera = Camera.open();
+			//camera.unlock();
 		}
 		
 	}
@@ -42,24 +43,27 @@ public class ToggleActivity extends FragmentActivity {
 	}
 
 	public void toggleFlashlight(View v){
-		camera = Camera.open();     
 		try{
 			Parameters p = camera.getParameters();
-			if(p.getFlashMode() == Parameters.FLASH_MODE_TORCH){
-				flashLightOn(p);
-			}else if (p.getFlashMode() == Parameters.FLASH_MODE_OFF){
-				flashLightOff(p);
+			if(p.getFlashMode().equals(Parameters.FLASH_MODE_TORCH)){
+				flashLightToggleOff(p);
+			}else if (p.getFlashMode().equals(Parameters.FLASH_MODE_OFF)){
+				flashLightToggleOn(p);
+			} else {
+				Toast.makeText(this, p.getFlashMode(), Toast.LENGTH_SHORT).show();
 			}
 
 		}catch(RuntimeException e){
 			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
 			camera.release();
 			camera = null;
 		}
 
 	}
 	
-	private void flashLightOn(Parameters par){
+	private void flashLightToggleOff(Parameters par){
+		Toast.makeText(this, "Flash is on, turning off", Toast.LENGTH_SHORT).show();
 		par.setFlashMode(Parameters.FLASH_MODE_OFF);
 		//TODO update image
 		camera.stopPreview();
@@ -68,7 +72,8 @@ public class ToggleActivity extends FragmentActivity {
 		camera = null;
 	}
 	
-	private void flashLightOff(Parameters par){
+	private void flashLightToggleOn(Parameters par){
+		Toast.makeText(this, "Flash is off, turning on", Toast.LENGTH_SHORT).show();
 		par.setFlashMode(Parameters.FLASH_MODE_TORCH);
 		camera.setParameters(par);
 		camera.startPreview();
