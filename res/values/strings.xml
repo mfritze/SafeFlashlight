@@ -4,5 +4,6 @@
     <string name="app_name">SafeFlashlight</string>
     <string name="hello_world">Hello world!</string>
     <string name="flashlight_toggle">Flashlight Toggle</string>
+    <string name="color_options">Color Options</string>
 
 </resources>
