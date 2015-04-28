@@ -17,14 +17,5 @@
         android:contentDescription="@string/flashlight_toggle"
          />
 
-    <Button
-        android:id="@+id/buttonChangeColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/text"
-        android:text="@string/color_options" />
 
 </RelativeLayout>
