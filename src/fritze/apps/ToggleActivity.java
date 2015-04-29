@@ -1,6 +1,8 @@
 package fritze.apps;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -37,27 +39,30 @@ public class ToggleActivity extends FragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		flashController.tearDown();
+		NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		manager.cancel(NOTIFICATIONID);
 	}
 
 	public void toggleFlashlight(View v){
 		String flash = flashController.toggleFlashLight();
 		// the method will return the old flash mode, so
 		// set the isOff flag to the opposite of the toggle
-		if(flash.equals(Parameters.FLASH_MODE_TORCH)){
-			launchNotification(true);
-		}else{
-			launchNotification(false);
+		if(flash.equals(Parameters.FLASH_MODE_OFF)){
+			launchNotification();
 		}
 	}
 	
-	public void launchNotification(boolean isOff){
-		NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		if(isOff){
-			manager.cancel(NOTIFICATIONID);
-		} else{
-			manager.notify(NOTIFICATIONID, builder.build());
-
-		}
+	public void launchNotification(){
+		// The pending intent will start this activity, 
+		// but will not create a new one, from the Update Current flag
+		NotificationManager manager = (NotificationManager)
+				getSystemService(NOTIFICATION_SERVICE);
+		Intent resultIntent = new Intent(this, ToggleActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, 
+				resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.setContentIntent(pendingIntent);
+		builder.setAutoCancel(true);
+		manager.notify(NOTIFICATIONID, builder.build());
 	}
 	
 }
