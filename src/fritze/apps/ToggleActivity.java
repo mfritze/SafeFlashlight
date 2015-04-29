@@ -1,11 +1,13 @@
 package fritze.apps;
 
 import android.app.NotificationManager;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 
+@SuppressWarnings("deprecation")
 public class ToggleActivity extends FragmentActivity {
 	private NotificationCompat.Builder builder;
 	private final int NOTIFICATIONID = 2147483647; // 2**31 - 1 mersene prime 
@@ -38,14 +40,24 @@ public class ToggleActivity extends FragmentActivity {
 	}
 
 	public void toggleFlashlight(View v){
-		flashController.toggleFlashLight();
-		launchNotification();
+		String flash = flashController.toggleFlashLight();
+		// the method will return the old flash mode, so
+		// set the isOff flag to the opposite of the toggle
+		if(flash.equals(Parameters.FLASH_MODE_TORCH)){
+			launchNotification(true);
+		}else{
+			launchNotification(false);
+		}
 	}
 	
-	public void launchNotification(){
-		// TODO some check that it's not already there? or make a take down if it is? that way you dont have to return it
+	public void launchNotification(boolean isOff){
 		NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		manager.notify(NOTIFICATIONID, builder.build());
+		if(isOff){
+			manager.cancel(NOTIFICATIONID);
+		} else{
+			manager.notify(NOTIFICATIONID, builder.build());
+
+		}
 	}
 	
 }
